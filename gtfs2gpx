@@ -55,7 +55,7 @@ for SS in $SHAPES ; do
     STOPIDS=$(csvtool namedcol trip_id,stop_id stop_times.txt \
         | grep "^${TRIPID}," | cut -d',' -f2 ; exit ${PIPESTATUS[1]})
     test $? -eq 0 || die 1 "trip_id not found in stop_times.txt"
-    TFILE=$(tempfile)
+    TFILE=$(mktemp)
     for STOP in $STOPIDS ; do
         csvtool namedcol stop_id,stop_name,stop_lat,stop_lon stops.txt\
             | grep "^${STOP}," >> "$TFILE"
