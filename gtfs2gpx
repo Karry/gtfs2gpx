@@ -57,11 +57,11 @@ for SS in $SHAPES ; do
     test $? -eq 0 || die 1 "trip_id not found in stop_times.txt"
     TFILE=$(tempfile)
     for STOP in $STOPIDS ; do
-        csvtool namedcol stop_id,stop_code,stop_name,stop_lat,stop_lon stops.txt\
+        csvtool namedcol stop_id,stop_name,stop_lat,stop_lon stops.txt\
             | grep "^${STOP}," >> "$TFILE"
         test $? -eq 0 || die 1 "stop_id $STOP not found in stops.txt"
     done
-    cat "$TFILE" | cut -d',' -f2,3,4,5 | tr -d '"' \
+    cat "$TFILE" | cut -d',' -f1,2,3,4 | tr -d '"' \
         | gpsbabel -w -i unicsv,fields=name+desc+lat+lon -f - \
             -o gpx -F "${OUTNAME}_stops.gpx"
     echo "${OUTNAME}_stops.gpx"
